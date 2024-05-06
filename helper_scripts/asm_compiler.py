@@ -3,6 +3,8 @@ from logger import Logger
 import sys
 import os
 import shutil
+import platform
+import random
 
 def assemble_all(asb_dir="test_files/assembler", asm_dir='test_files/assembly_files', mem_dir="test_files/mem_files", os_name="Linux"):
     if not os.path.exists(asm_dir):
@@ -35,8 +37,14 @@ def assemble_all(asb_dir="test_files/assembler", asm_dir='test_files/assembly_fi
 def assemble(file_path, canonical_name, asb_dir, asm_dir, mem_dir, os_name):
 
     # Path to the assembler executable
-    # TODO: null check
     assembler_path = f"{asb_dir}/asm_{os_name.upper()}"
+
+    if os_name.upper() == "WIN":
+        assembler_path += ".exe"
+
+    if not os.path.exists(assembler_path):
+        Logger.error(f"Could not find assembler executable at '{assembler_path}'.")
+        sys.exit(1)
 
     # Command to run the assembler
     command = [assembler_path, file_path]
@@ -55,7 +63,27 @@ def assemble(file_path, canonical_name, asb_dir, asm_dir, mem_dir, os_name):
         Logger.warn(f"Assembler failed to execute for {file_path}. Error: {e}")
     except IOError as e:
         Logger.warn(f"Error writing to memory file for {file_path}. Error: {e}")
+import platform
+
+#TODO: doesn't work on my M1 Mac for some reason
+def detect_os():
+    system = platform.system()
+    if system == "Darwin":
+        mac_version = platform.mac_ver()[0]
+        if "arm" in platform.processor():
+            return "MacM1"
+        else:
+            return "MacIntel"
+    elif system == "Windows":
+        return "Win"
+    elif system == "Linux":
+        return "Linux"
+    else:
+        random_os = random.choice(["MacM1", "MacIntel", "Win", "Linux"])
+        Logger.warn(f"Unknown OS. Randomly selected: {random_os}")
+        return random_os
 
 if __name__ == "__main__":
     Logger.setup(log_level="INFO", output_destination="TERM")
-    assemble_all(os_name="MacM1")
+    assemble_all(os_name="macm1")
+    # print(detect_os())

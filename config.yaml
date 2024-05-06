@@ -6,16 +6,12 @@ OUTPUT: output
 
 
 # Logging
-
-# Possible level options are INFO, IVERILOG, WARN, and ERROR
-LEVEL: INFO
-# Possible location options are TERM and FILE
-LOC: TERM
+LEVEL: INFO     # Possible level options are INFO, IVERILOG, WARN, and ERROR
+LOC: TERM       # Possible location options are TERM and FILE
 DIR: log
-ROLL: True 
+ROLL_LOG: True 
 
 
-# Other
-
-# Possible os options are MACM1, MACINTEL, WIN, and LINUX
-OS: MACM1
+# Other 
+OS: MACM1       # Possible os options are MACM1, MACINTEL, WIN, and LINUX
+ROLL_OUT: True

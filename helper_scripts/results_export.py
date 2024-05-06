@@ -3,17 +3,23 @@ from logger import Logger
 import os
 import csv
 
+import util
 import default_values as dv
 from proc_compiler import compile_all_procs
 
-def export_results(proc_results, tests, folder=dv.OUTPUT_DIR):
+def export_results(proc_results, tests, rolling=True, folder=dv.OUTPUT_DIR):
     """
     Given a list of ProcResults objects, consolidates all results and exports into a CSV file
     """
+
+    if(rolling):
+        util.delete_old_folders(folder)
+
     # Prepare CSV file path
     curr_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     output_folder = folder + "/" + curr_time
-    csv_file_path = output_folder + "/results.csv"
+    results_csv = output_folder + "/results.csv"
+    diff_csv = output_folder + "/diff.csv"
 
     if not os.path.exists(folder):
         os.makedirs(folder)
@@ -26,9 +32,12 @@ def export_results(proc_results, tests, folder=dv.OUTPUT_DIR):
     fieldnames = ["processor name", "test name", "expected", "actual", "diff"]
 
     # Write data to CSV file
-    with open(csv_file_path, mode='w', newline='') as file:
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
+    with open(results_csv, mode='w', newline='') as res, open(diff_csv, mode='w', newline='') as diff:
+        writer = csv.DictWriter(res, fieldnames=fieldnames)
         writer.writeheader()
+
+        diff_writer = csv.DictWriter(diff, fieldnames=fieldnames)
+        diff_writer.writeheader()
 
         # Iterate through ProcResults
         for proc_result in proc_results:
@@ -47,6 +56,28 @@ def export_results(proc_results, tests, folder=dv.OUTPUT_DIR):
                     "actual": actual_val,
                     "diff": diff_val
                 })
+
+                # Write row to diff CSV if diff_val is not 0
+                if diff_val != 0:
+                    diff_writer.writerow({
+                        "processor name": proc_result.name,
+                        "test name": test,
+                        "expected": expected_val,
+                        "actual": actual_val,
+                        "diff": diff_val
+                    })
+
+    Logger.info(f"Results exported to '{output_folder}/'.")
+    # Pretty print to console
+    print("\nResults:")
+    print("{:<20} {:<20} {:<10} {:<10} {:<10}".format(*fieldnames))
+    for proc_result in proc_results:
+        for test in tests:
+            expected_val = 1 if test in proc_result.expected else 0
+            actual_val = 1 if test in proc_result.actual else 0
+            diff_val = actual_val - expected_val
+
+            print("{:<20} {:<20} {:<10} {:<10} {:<10}".format(proc_result.name, test, expected_val, actual_val, "\033[91m{}\033[0m".format(diff_val) if diff_val != 0 else "\033[92m{}\033[0m".format(diff_val)))
 
 def get_tests(tests_folder):
     if not os.path.exists(tests_folder):

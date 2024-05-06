@@ -73,7 +73,8 @@ def compile_proc(proc_folder, test_name):
     if run_error:
         Logger.warn(f"iverilog runtime error: {run_error}")
 
-    # Find result TODO: maybe better way of doing this? 
+    # Find result 
+    # TODO: maybe better way of doing this? 
     index_finished = run_output.rfind("Finished:")
     result = run_output[index_finished + len("Finished:")]
 

@@ -1,5 +1,6 @@
 import default_values as dv
 from datetime import datetime
+import util 
 import os
 
 class Logger:
@@ -17,33 +18,17 @@ class Logger:
             os.makedirs(folder_path)
 
         curr_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-
-        if(rolling):
-            Logger.delete_old_files(folder_path)
     
-        # Construct file name with today's date
-        Logger.file_path = os.path.join(folder_path, f"log_{curr_time}.txt")
+        if(Logger.output_destination == "FILE"):
+            if(rolling):
+                util.delete_old_files(folder_path)
 
-        # Create the file
-        with open(Logger.file_path, 'w') as file:
-            file.write("Log output for run at " + curr_time + "\n")
+            # Construct file name with today's date
+            Logger.file_path = os.path.join(folder_path, f"log_{curr_time}.txt")
 
-    def delete_old_files(directory):
-        try:
-            # Get a list of all files in the directory along with their modification times
-            files = [(os.path.join(directory, f), os.path.getmtime(os.path.join(directory, f))) for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
-            
-            # Sort the files based on modification times
-            files.sort(key=lambda x: x[1])
-
-            # Keep the four most recent files and delete the rest
-            files_to_delete = files[:-4]
-            for file, _ in files_to_delete:
-                os.remove(file)
-            
-        except OSError as e:
-            print(f"Logging Error: {e}")
-        
+            # Create the file
+            with open(Logger.file_path, 'w') as file:
+                file.write("Log output for run at " + curr_time + "\n")        
 
     def info(message):
         if Logger.log_level <= Logger.priority_dict["INFO"]:
@@ -76,7 +61,7 @@ class Logger:
 
 # Example usage:
 if __name__ == "__main__":
-    Logger.setup(log_level="INFO", output_destination="TERM")
+    Logger.setup(log_level="INFO", output_destination="FILE")
     Logger.info("This is an information message")
     Logger.iverilog("This is iverilog output")
     Logger.warn("This is a warning message")
