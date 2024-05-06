@@ -31,6 +31,8 @@
  *
  * Note the backslashes (\) preceding the quotes. These are required.
  *
+ * 05/06/2024: removed gtkwave, extraneous print statements for cleaner logging 
+ *
  **/
 
 module Wrapper_tb #(parameter FILE = "");
