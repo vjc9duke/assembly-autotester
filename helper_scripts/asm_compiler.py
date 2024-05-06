@@ -62,7 +62,7 @@ def assemble(file_path, canonical_name, asb_dir, asm_dir, mem_dir, os_name):
     except subprocess.CalledProcessError as e:
         Logger.warn(f"Assembler failed to execute for {file_path}. Error: {e}")
     except IOError as e:
-        Logger.warn(f"Error writing to memory file for {file_path}. Error: {e}")
+        Logger.warn(f"Error writing to memory file for {file_path}. Make sure you have the correct OS configured in config.yaml. Error: {e}")
 import platform
 
 #TODO: doesn't work on my M1 Mac for some reason
