@@ -122,7 +122,9 @@ def compile_all_procs(tests, procs_folder="example"):
 
             # Change directory back to original
             os.chdir(original_directory)
-    return proc_results
+
+    sorted_results = sorted(proc_results, key=lambda x: x.name)
+    return sorted_results
 
 if __name__ == "__main__":
     Logger.setup(log_level="INFO", output_destination="TERM")
