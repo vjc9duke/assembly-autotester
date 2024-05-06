@@ -26,5 +26,21 @@ lw $r11, 7($r0)     # [CHECK] r11 should be 10
 nop
 lw $r12, 6($r0)     # lw -> sw rs bypassing
 sw $r1, 0($r12)
-lw $r13, 20($r0)     # [CHECK] r13 should be 10
+lw $r13, 20($r0)    # [CHECK] r13 should be 10
 nop
+sw $r1, 8($r0)      # sw -> sw rd no bypassing
+sw $r1, 9($r0)
+nop
+nop
+nop
+lw $r14, 8($r0)     # [CHECK] r14 should be 10
+lw $r15, 9($r0)     # [CHECK] r15 should be 10
+nop
+nop
+sw $r2, 10($r0)
+lw $r16, 5($r0)     # lw -> lw rd -> rs bypassing 
+lw $r17, 0($r16)    # [CHECK] r17 should be 20
+nop
+nop
+lw $r18, 6($r0)     # lw -> lw rd -> rd no bypassing 
+lw $r18, 5($r0)    # [CHECK] r18 should be 10
