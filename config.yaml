@@ -1,5 +1,5 @@
 # Folder paths
-PROCS: procs
+PROCS: example
 
 # Logging
 LOG_LEVEL: INFO     # Possible level options are INFO, IVERILOG, WARN, and ERROR

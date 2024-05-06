@@ -41,8 +41,14 @@ def file_list(proc_folder):
     # Run the find command to get a list of .v files and store the result in FileList.txt
     os.system('find . -name "*.v" > FileList.txt')
     
-    # Open FileList.txt in append mode and add the additional line
-    with open('FileList.txt', 'a') as file:
+    # Read the contents of FileList.txt and remove lines containing "Wrapper_tb.v"
+    with open('FileList.txt', 'r') as file:
+        lines = file.readlines()
+    lines = [line for line in lines if "Wrapper_tb.v" not in line]
+    
+    # Write back the modified lines and add the additional line
+    with open('FileList.txt', 'w') as file:
+        file.writelines(lines)
         file.write(f'{dv.WRAPPER_PATH}\n')
 
 def compile_proc(proc_folder, test_name):
@@ -59,9 +65,9 @@ def compile_proc(proc_folder, test_name):
     compile_cmd = f'iverilog -o proc -c FileList.txt -s Wrapper_tb -P Wrapper_tb.FILE=\\\"{test_name}\\\"'
     compile_process = subprocess.Popen(compile_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     compile_output, compile_error = compile_process.communicate()
-    Logger.iverilog(f"Compiler output: {compile_output.decode('utf-8')}")
+    Logger.iverilog(f"Compiler output: \n {compile_output.decode('utf-8')}")
     if compile_error:
-        Logger.warn(f"iverilog compilation error: {compile_error.decode('utf-8')}")  
+        Logger.warn(f"iverilog compilation error: \n{compile_error.decode('utf-8')}")  
     
     # Run vvp
     run_cmd = 'vvp proc'
@@ -69,9 +75,9 @@ def compile_proc(proc_folder, test_name):
     run_output, run_error = run_process.communicate()
     run_output = run_output.decode('utf-8')
 
-    Logger.iverilog(f"Simulation output: {run_output}")
+    Logger.iverilog(f"Simulation output: \n {run_output}")
     if run_error:
-        Logger.warn(f"iverilog runtime error: {run_error}")
+        Logger.warn(f"iverilog runtime error: \n {run_error}")
 
     # Find result 
     # TODO: maybe better way of doing this? 

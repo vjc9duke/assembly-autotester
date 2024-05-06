@@ -1,0 +1,12 @@
+./alu.v
+./register.v
+./dffe_ref.v
+./Wrapper.v
+./RAM.v
+./processor.v
+./regfile.v
+./decoder.v
+./ROM.v
+./mux_8.v
+./reg64.v
+../../test_files/Wrapper_tb.v
