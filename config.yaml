@@ -1,0 +1,21 @@
+# Folder paths
+ASSEM: test-files/assembly-files
+MEM: test-files/mem-files
+EXP: test-files/verification-files
+OUTPUT: output
+
+
+
+# Logging
+
+# Possible level options are INFO, IVERILOG, WARN, and ERROR
+LEVEL: INFO
+# Possible location options are TERM and FILE
+LOC: TERM
+
+
+
+# Other
+
+# Possible os options are MACM1, MACINTEL, WIN, and LINUX
+OS: MACM1
