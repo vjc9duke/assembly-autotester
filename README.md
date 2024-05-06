@@ -21,6 +21,7 @@ Parameters to configure the Logger are also available in the configuration file:
 
 Other parameters:
 * `OUT_ROLL`: Enables rolling output files. If set to `True`, only the five most recent files are kept in the `output` directory.
+* `FILT_ASM`: Enables filtering of the `test_files/assembly_files` directory. If set to `True`, only files listed in `test_files/assembly_files/active.txt` are tested.
 
 ## Usage
 1. Run `pip install -r requirements.txt` to install the required packages.

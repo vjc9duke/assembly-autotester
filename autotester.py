@@ -41,10 +41,10 @@ def main():
 
     # Assemble all files
     try:
-        asm.assemble_all(os_name=config_data["OS"])
+        asm.assemble_all(os_name=config_data["OS"], filter_files=config_data["FILT_ASM"])
     except KeyError as e:
         asm.assemble_all()
-        Logger.warn(f"Missing OS key in config file. Defaulting to 'Linux'.")
+        Logger.warn(f"Missing assembler-related key in config file. Defaulting to OS=Linux, filter_files=False: {e}")
 
     Logger.info("Assembly file compilation complete.")
 

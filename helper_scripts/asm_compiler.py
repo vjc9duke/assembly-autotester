@@ -6,7 +6,7 @@ import shutil
 import platform
 import random
 
-def assemble_all(asb_dir="test_files/assembler", asm_dir='test_files/assembly_files', mem_dir="test_files/mem_files", os_name="Linux"):
+def assemble_all(asb_dir="test_files/assembler", asm_dir='test_files/assembly_files', mem_dir="test_files/mem_files", os_name="Linux", filter_files=False):
     if not os.path.exists(asm_dir):
         Logger.error(f"Could not find directory '{asm_dir}' for assembly files.")
         sys.exit(1)
@@ -28,11 +28,32 @@ def assemble_all(asb_dir="test_files/assembler", asm_dir='test_files/assembly_fi
                 os.remove(file_path)
         except OSError as e:
             Logger.warn(f"Error deleting mem file '{file_path}'. Error: {e}")
+    
+    if filter_files:
+        active_files = get_active_list(asm_dir=asm_dir)
 
     for filename in os.listdir(asm_dir):
         path = os.path.join(asm_dir, filename)
-        if os.path.isfile(path) and filename.endswith('.s'):
+        if os.path.isfile(path) and filename.endswith('.s') and (not filter_files or filename in active_files):
             assemble(file_path=path, canonical_name=os.path.splitext(filename)[0], asb_dir=asb_dir, asm_dir=asm_dir, mem_dir=mem_dir, os_name=os_name)
+
+def get_active_list(asm_dir='test_files/assembly_files'):
+
+    file = os.path.join(asm_dir, "active.txt")
+    if not os.path.exists(file):
+        Logger.warn(f"Could not find active assembly file list '{file}'.")
+        return []
+
+    lines = []
+    with open(file, 'r') as file:
+        lines = file.readlines()
+    
+    trimmed_lines = [line.strip() + ".s" for line in lines]
+
+    if len(trimmed_lines) == 0:
+        Logger.warn(f"No active assembly files found in '{file}'.")
+
+    return trimmed_lines
 
 def assemble(file_path, canonical_name, asb_dir, asm_dir, mem_dir, os_name):
 

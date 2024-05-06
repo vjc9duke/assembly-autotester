@@ -11,3 +11,4 @@ LOG_ROLL: True
 # Other 
 OS: MACM1       # Possible os options are MACM1, MACINTEL, WIN, and LINUX
 OUT_ROLL: True
+FILT_ASM: False
