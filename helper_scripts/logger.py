@@ -7,7 +7,7 @@ class Logger:
     Logging class that logs messages to the terminal or a file.
     """
 
-    priority_dict = {"INFO": 0, "IVERILOG": 10, "WARN": 20, "ERROR": 30}
+    priority_dict = {"INFO": 0, "IVERILOG": 10, "WARN": 20, "ERROR": 30, "NONE": 5000}
 
     def setup(log_level="INFO", output_destination="TERM", rolling=True, folder_path=dv.LOG_DIR):
         Logger.log_level = Logger.priority_dict[log_level.upper()]
