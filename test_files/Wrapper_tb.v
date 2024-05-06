@@ -221,9 +221,10 @@ module Wrapper_tb #(parameter FILE = "");
 					$display("\tFAILED Reg: %2d Expected: %11d Actual: %11d",
 						rs1_test, $signed(exp_result), $signed(regA));
 					errors = errors + 1;
-				end else begin
-					$display("\tPASSED Reg: %2d", rs1_test);
-				end
+				end 
+				// else begin
+				// 	$display("\tPASSED Reg: %2d", rs1_test);
+				// end
 
 				// Obtain the register value
 				expScan =  $fscanf(expFile, "%s", exp_text);

@@ -34,3 +34,4 @@ Other parameters:
 ## Additional Notes
 * This autotester uses a custom version of `Wrapper_tb.v` and can be found in the `test_files` directory. This version only outputs failed registers and a final pass/fail message. GTKWave is also disabled. 
 * Make sure there is a new line at the end of all exp files in the `test_files/verification_files` directory. 
+* There is a work-in-progress automatic OS detection function in `helper_scripts/asm_compiler.py`. It didn't work for detecting between Apple Silicon and Intel Macs. Another possible solution is to compile the source files for the assembler dynamically. 
