@@ -32,5 +32,5 @@ Other parameters:
     - You may also specify a different configuration file by running `python autotester.py <config_file>`.
 
 ## Additional Notes
-* This autotester uses a custom version of `Wrapper_tb.v` found in the `test_files` directory. This version only outputs failed registers and a final pass/fail message. GTKWave is also disabled. 
-* If you are getting incorrect expected values from registers, define all register values in `<test_name>_exp.txt` instead of just the registers you expect to change. 
+* This autotester uses a custom version of `Wrapper_tb.v` and can be found in the `test_files` directory. This version only outputs failed registers and a final pass/fail message. GTKWave is also disabled. 
+* Make sure there is a new line at the end of all exp files in the `test_files/verification_files` directory. 

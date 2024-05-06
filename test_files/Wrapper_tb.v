@@ -1,10 +1,36 @@
 `timescale 1ns / 1ps
 /**
  * 
- * Modifications for autotester:
- * 1. DIR changed to ../../test_files/
- * 2. MEM_DIR and other directories changed to match naming conventions
- * 3. All output except differing registers removed
+ * READ THIS DESCRIPTION:
+ *
+ * This is the Wrapper module that will serve as the header file combining your processor, 
+ * RegFile and Memory elements together.
+ *
+ * This file will be used to test your processor for functionality.
+ * We have provided a sibling file, Wrapper_tb.v so that you can test your processor's functionality.
+ * 
+ * We will be using our own separate Wrapper_tb.v to test your code. 
+ * You are allowed to make changes to the Wrapper files 
+ * for your own individual testing, but we expect your final processor.v 
+ * and memory modules to work with the Wrapper interface as provided.
+ * 
+ * Refer to Lab 5 documents for detailed instructions on how to interface 
+ * with the memory elements. Each imem and dmem modules will take 12-bit 
+ * addresses and will allow for storing of 32-bit values at each address. 
+ * Each memory module should receive a single clock. At which edges, is 
+ * purely a design choice (and thereby up to you). 
+ * 
+ * You must set the parameter when compiling to use the memory file of 
+ * the test you created using the assembler and load the appropriate 
+ * verification file.
+ *
+ * For example, you would add sample as your parameter after assembling sample.s
+ * using the command
+ *
+ * 	 iverilog -o proc -c FileList.txt -s Wrapper_tb -PWrapper_tb.FILE=\"sample\"
+ *
+ * Note the backslashes (\) preceding the quotes. These are required.
+ *
  **/
 
 module Wrapper_tb #(parameter FILE = "");
@@ -117,17 +143,17 @@ module Wrapper_tb #(parameter FILE = "");
 		end
 
 		// Output file name
-		// $dumpfile({DIR, OUT_DIR, FILE, ".vcd"});
+		// $dumpfile(VCD_FILE);
 		// Module to capture and what level, 0 means all wires
-		// $dumpvars(0, Wrapper_tb);
+		// $dumpvars(0, main_tb);
 
 		// $display();
 
 		// Create the files to store the output
-		// actFile = $fopen({DIR, OUT_DIR, FILE, "_actual.txt"},   "w");
+		// actFile = $fopen(ACT_FILE,   "w");
 
 		if (verify) begin
-			// diffFile = $fopen({DIR, OUT_DIR, FILE, "_diff.txt"},  "w");
+			// diffFile = $fopen(DIFF_FILE,  "w");
 
 			// Get the number of cycles from the file
 			expScan = $fscanf(expFile, "num cycles:%d", 
@@ -141,7 +167,7 @@ module Wrapper_tb #(parameter FILE = "");
 			end
 		end
 
-		// Clear the Processor at the beginning
+		// Clear the Processor for the first cycle
 		reset = 1;
 		#1
 		reset = 0;
@@ -152,25 +178,21 @@ module Wrapper_tb #(parameter FILE = "");
 			// Every rising edge, write to the actual file
 			@(posedge clock);
 			// if (rwe && rd != 0) begin
-			// 	$display("Cycle %3d: Wrote %0d into register %0d", cycles, rData, rd);
+			// 	$fdisplay(actFile, "Cycle %3d: Wrote %0d into register %0d", cycles, $signed(rData), rd);
 			// end
 		end
-
-		// $fdisplay(actFile, "============== Testing Mode ==============");
-
-		// if (verify)
-		// 	$display("\t================== Checking Registers ==================");
 
 		// Activate the test harness
 		testMode = 1;
 
-		// Check the values in the regfile
-		for (reg_to_test = 0; reg_to_test < 32; reg_to_test = reg_to_test + 1) begin
-			
-			if (verify) begin
-				// Obtain the register value
-				expScan =  $fscanf(expFile, "%s", exp_text);
-				expScan = $sscanf(exp_text, "r%d=%d", null, exp_result);
+		if (verify) begin
+			// $display("\t================== Checking Registers ==================");
+
+			// Obtain the register value
+			expScan =  $fscanf(expFile, "%s", exp_text);
+			expScan = $sscanf(exp_text, "r%d=%d", reg_to_test, exp_result);
+
+			while (!$feof(expFile)) begin
 
 				// Check for errors when reading
 				if (expScan != 2) begin
@@ -186,44 +208,53 @@ module Wrapper_tb #(parameter FILE = "");
 					#100;
 					$finish;
 				end
-			end 
-			
-			// Allow the regfile output value to stabilize
-			#1;
 
-			// Write the register value to the actual file
-			// $fdisplay(actFile, "Reg %2d: %11d", rs1_test, regA);
-			
-			// Compare the Values 
-			if (verify) begin
+				// Allow the regfile output value to stabilize
+				#1;
+
+				// Compare the Values 
 				if (exp_result !== regA) begin
 					// $fdisplay(diffFile, "Reg: %2d Expected: %11d Actual: %11d",
-						// rs1_test, $signed(exp_result), $signed(regA));
+					// 	rs1_test, $signed(exp_result), $signed(regA));
 					$display("\tFAILED Reg: %2d Expected: %11d Actual: %11d",
 						rs1_test, $signed(exp_result), $signed(regA));
 					errors = errors + 1;
-				end /*else begin
+				end else begin
 					$display("\tPASSED Reg: %2d", rs1_test);
-				end*/
+				end
+
+				// Obtain the register value
+				expScan =  $fscanf(expFile, "%s", exp_text);
+				expScan = $sscanf(exp_text, "r%d=%d", reg_to_test, exp_result);
 			end
-		end
 
-		// Close the Files
-		$fclose(expFile);
-		$fclose(actFile);
+			// $fclose(diffFile);
 
-		if (verify)
-			$fclose(diffFile);
-
-		// Display the tests and errors
-		if (verify)
 			// $display("\nFinished %0d cycle%c with %0d error%c", cycles, "s"*(cycles != 1), errors, "s"*(errors != 1));
+
 			if(errors == 0)
 				$display("Finished:P");
 			else
 				$display("Finished:F");
-		// else 
-		// 	$display("Finished %0d cycle%c", cycles, "s"*(cycles != 1));
+		end else begin
+
+			// Check the values in the regfile
+			// for (reg_to_test = 0; reg_to_test < 32; reg_to_test = reg_to_test + 1) begin
+				
+			// 	// Allow the regfile output value to stabilize
+			// 	#1;
+
+			// 	// Write the register value to the actual file
+			// 	// $fdisplay(actFile, "Reg %2d: %11d", rs1_test, $signed(regA));
+
+			// 	// $display("Finished %0d cycle%c", cycles, "s"*(cycles != 1));
+
+			// end
+		end
+
+		// Close the Files
+		$fclose(expFile);
+		// $fclose(actFile);
 
 		#100;
 		$finish;
