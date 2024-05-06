@@ -79,7 +79,7 @@ def compile_proc(proc_folder, test_name):
 
     return result == 'P'
 
-def compile_all_procs(procs_folder, tests_folder):
+def compile_all_procs(procs_folder, tests):
     """
     Compiles all processors in the given folder.
     """
@@ -88,16 +88,6 @@ def compile_all_procs(procs_folder, tests_folder):
     if not os.path.exists(procs_folder):
         Logger.error(f"Processor directory '{procs_folder}' does not exist.")
         sys.exit(1)
-    if not os.path.exists(tests_folder):
-        Logger.error(f"Memory files directory '{tests_folder}' does not exist.")
-        sys.exit(1)    
-
-    tests = []
-    for test_file in os.listdir(tests_folder):
-        if os.path.isfile(os.path.join(tests_folder, test_file)):
-            file_name, file_extension = os.path.splitext(test_file)
-            if file_extension == ".mem":
-                tests.append(file_name)
 
     proc_results = []
     original_directory = os.getcwd()
@@ -123,8 +113,8 @@ def compile_all_procs(procs_folder, tests_folder):
 if __name__ == "__main__":
     Logger.setup(log_level="INFO", output_destination="TERM")
     procs_folder = 'procs'  
-    tests_folder = 'test_files/mem_files'
-    results = compile_all_procs(procs_folder, tests_folder)
+    tests = ["alu_bypass", "alu_double_bypass", "bad"]
+    results = compile_all_procs(procs_folder, tests)
 
     for result in results:
         print(f"Processor: {result.name}")
