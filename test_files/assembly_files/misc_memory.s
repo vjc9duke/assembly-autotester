@@ -5,13 +5,13 @@ nop
 nop
 addi $r1, $r0, 10
 addi $r2, $r0, 20
-sw $r1, 5($r0)      # setup: puts 10 into memory address 5
-sw $r2, 6($r0)      # setup: puts 20 into memory address 6
+sw $r1, 5($r0)      # WX bypassing
+sw $r2, 6($r0)      # WX bypassing
 nop
 nop
 md:                 # [SECTION] multdiv following lw
-lw $r3, 5($r0)      # [CHECK] r3 should be 10 (WX bypassing)
-lw $r4, 6($r0)      # [CHECK] r4 should be 20 (WX bypassing)
+lw $r3, 5($r0)      # [CHECK] r3 should be 10 (WX bypassing on previous sw)
+lw $r4, 6($r0)      # [CHECK] r4 should be 20 (WX bypassing on previous sw)
 mul $r6, $r3, $r4   # [CHECK] r6 should be 200
 nop
 lw $r7, 5($r0)
@@ -43,4 +43,4 @@ lw $r17, 0($r16)    # [CHECK] r17 should be 20
 nop
 nop
 lw $r18, 6($r0)     # lw -> lw rd -> rd no bypassing 
-lw $r18, 5($r0)    # [CHECK] r18 should be 10
+lw $r18, 5($r0)     # [CHECK] r18 should be 10

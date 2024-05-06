@@ -32,6 +32,17 @@ Other parameters:
 5. Run `python autotester.py` to run the autotester.
     - You may also specify a different configuration file by running `python autotester.py <config_file>`.
 
+## Output
+For each run, the autotester generates a new folder in the `output` directory with the current timestamp. This contains a summary `results.csv` file and a `diff.csv` file. Each file has the following columns:
+* `processor name`: The name of the processor tested
+* `test name`: The name of the test
+* `expected`: The expected output of the test
+* `actual`: The actual output of the test
+    - 1 for pass
+    - 0 for fail
+    - -1 for failed to run
+* `diff`: `actual` - `expected`
+
 ## Additional Notes
 * This autotester uses a custom version of `Wrapper_tb.v` and can be found in the `test_files` directory. This version only outputs failed registers and a final pass/fail message. GTKWave is also disabled. 
 * Make sure there is a new line at the end of all exp files in the `test_files/verification_files` directory. 

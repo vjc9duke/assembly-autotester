@@ -74,7 +74,7 @@ def export_results(proc_results, tests, rolling=False, folder=dv.OUTPUT_DIR):
     for proc_result in proc_results:
         for test in tests:
             expected_val = 1 if test in proc_result.expected else 0
-            actual_val = 1 if test in proc_result.actual else 0
+            actual_val = 1 if test in proc_result.actual else -1 if test in proc_result.failed else 0
             diff_val = actual_val - expected_val
 
             print("{:<20} {:<20} {:<10} {:<10} {:<10}".format(proc_result.name, test, expected_val, actual_val, "\033[91m{}\033[0m".format(diff_val) if diff_val != 0 else "\033[92m{}\033[0m".format(diff_val)))

@@ -12,6 +12,7 @@ class ProcResult:
         self.name = name
         self.expected = expected
         self.actual = []
+        self.failed = []
     
     # TODO: maybe shouldn't be a static function?
     def read_exp(folder):
@@ -82,9 +83,13 @@ def compile_proc(proc_folder, test_name):
     # Find result 
     # TODO: maybe better way of doing this? 
     index_finished = run_output.rfind("Finished:")
+    if index_finished == -1:
+        Logger.warn("Simultion failed to run")
+        return -1
+    
     result = run_output[index_finished + len("Finished:")]
 
-    return result == 'P'
+    return 1 if (result == 'P') else 0
 
 def compile_all_procs(tests, procs_folder="example"):
     """
@@ -109,8 +114,10 @@ def compile_all_procs(tests, procs_folder="example"):
 
             for test in tests:
                 res = compile_proc(proc_folder, test)
-                if(res):
+                if(res == 1):
                     current_proc.actual.append(test)
+                elif(res == -1):
+                    current_proc.failed.append(test)
             proc_results.append(current_proc)
 
             # Change directory back to original
