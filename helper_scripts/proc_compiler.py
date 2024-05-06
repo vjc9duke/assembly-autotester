@@ -1,5 +1,5 @@
-from logger import Logger
-import default_values as dv
+from helper_scripts.logger import Logger
+import helper_scripts.default_values as dv
 
 import subprocess
 import os
@@ -80,7 +80,7 @@ def compile_proc(proc_folder, test_name):
 
     return result == 'P'
 
-def compile_all_procs(procs_folder, tests):
+def compile_all_procs(tests, procs_folder="example"):
     """
     Compiles all processors in the given folder.
     """

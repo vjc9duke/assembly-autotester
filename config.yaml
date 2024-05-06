@@ -1,17 +1,13 @@
 # Folder paths
-ASSEM: test-files/assembly-files
-MEM: test-files/mem-files
-EXP: test-files/verification-files
-OUTPUT: output
-
+PROCS: procs
 
 # Logging
-LEVEL: INFO     # Possible level options are INFO, IVERILOG, WARN, and ERROR
-LOC: TERM       # Possible location options are TERM and FILE
-DIR: log
-ROLL_LOG: True 
+LOG_LEVEL: INFO     # Possible level options are INFO, IVERILOG, WARN, and ERROR
+LOG_LOC: FILE       # Possible location options are TERM and FILE
+LOG_DIR: log
+LOG_ROLL: True 
 
 
 # Other 
 OS: MACM1       # Possible os options are MACM1, MACINTEL, WIN, and LINUX
-ROLL_OUT: True
+OUT_ROLL: True

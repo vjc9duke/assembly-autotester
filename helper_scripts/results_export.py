@@ -1,13 +1,13 @@
 from datetime import datetime
-from logger import Logger
 import os
 import csv
 
-import util
-import default_values as dv
-from proc_compiler import compile_all_procs
+import helper_scripts.util as util
+import helper_scripts.default_values as dv
+from helper_scripts.logger import Logger
+from helper_scripts.proc_compiler import compile_all_procs
 
-def export_results(proc_results, tests, rolling=True, folder=dv.OUTPUT_DIR):
+def export_results(proc_results, tests, rolling=False, folder=dv.OUTPUT_DIR):
     """
     Given a list of ProcResults objects, consolidates all results and exports into a CSV file
     """
@@ -79,6 +79,7 @@ def export_results(proc_results, tests, rolling=True, folder=dv.OUTPUT_DIR):
 
             print("{:<20} {:<20} {:<10} {:<10} {:<10}".format(proc_result.name, test, expected_val, actual_val, "\033[91m{}\033[0m".format(diff_val) if diff_val != 0 else "\033[92m{}\033[0m".format(diff_val)))
 
+# Note: duplicated, but for testing only
 def get_tests(tests_folder):
     if not os.path.exists(tests_folder):
         Logger.error(f"Memory files directory '{tests_folder}' does not exist.")
