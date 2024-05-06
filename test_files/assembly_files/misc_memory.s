@@ -44,3 +44,5 @@ nop
 nop
 lw $r18, 6($r0)     # lw -> lw rd -> rd no bypassing 
 lw $r18, 5($r0)     # [CHECK] r18 should be 10
+nop
+nop

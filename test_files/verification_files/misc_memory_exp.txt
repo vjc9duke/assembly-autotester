@@ -1,4 +1,4 @@
-num cycles:100
+num cycles:250
 r3=10
 r4=20
 r6=200
