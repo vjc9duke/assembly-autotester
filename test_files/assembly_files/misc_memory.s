@@ -5,13 +5,16 @@ nop
 nop
 addi $r1, $r0, 10
 addi $r2, $r0, 20
-sw $r1, 5($r0)      # WX bypassing
-sw $r2, 6($r0)      # WX bypassing
+nop
+nop
+nop
+sw $r1, 5($r0)      
+sw $r2, 6($r0)      
 nop
 nop
 md:                 # [SECTION] multdiv following lw
-lw $r3, 5($r0)      # [CHECK] r3 should be 10 (WX bypassing on previous sw)
-lw $r4, 6($r0)      # [CHECK] r4 should be 20 (WX bypassing on previous sw)
+lw $r3, 5($r0)      
+lw $r4, 6($r0)      
 mul $r6, $r3, $r4   # [CHECK] r6 should be 200
 nop
 lw $r7, 5($r0)
@@ -44,5 +47,15 @@ nop
 nop
 lw $r18, 6($r0)     # lw -> lw rd -> rd no bypassing 
 lw $r18, 5($r0)     # [CHECK] r18 should be 10
+nop
+nop
+addi $r19, $r0, 10  # sw WX bypassing test
+addi $r20, $r0, 20
+sw $r19, 21($r0)      
+sw $r20, 22($r0)  
+nop
+nop
+lw $r21, 21($r0)    # [CHECK] r21 should be 10
+lw $r22, 22($r0)    # [CHECK] r22 should be 20
 nop
 nop

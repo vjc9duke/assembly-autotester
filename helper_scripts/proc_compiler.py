@@ -40,12 +40,11 @@ def file_list(proc_folder):
     """
     
     # Run the find command to get a list of .v files and store the result in FileList.txt
-    os.system('find . -name "*.v" > FileList.txt')
+    os.system('find . -name "*.v" ! -name "Wrapper_tb.v" > FileList.txt')
     
     # Read the contents of FileList.txt and remove lines containing "Wrapper_tb.v"
     with open('FileList.txt', 'r') as file:
         lines = file.readlines()
-    lines = [line for line in lines if "Wrapper_tb.v" not in line]
     
     # Write back the modified lines and add the additional line
     with open('FileList.txt', 'w') as file:
