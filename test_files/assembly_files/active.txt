@@ -1,3 +1,2 @@
-setx_bypass
-misc_memory
-branch_memory
+sort_nop
+jal_bypass
