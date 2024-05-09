@@ -191,6 +191,8 @@ Temporary Items
 # Testing directories
 procs/
 procs2/
+procs3/
+procs4/
 output/
 log/
 config2.yaml

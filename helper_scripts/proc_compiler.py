@@ -40,7 +40,7 @@ def file_list(proc_folder):
     """
     
     # Run the find command to get a list of .v files and store the result in FileList.txt
-    os.system('find . -name "*.v" ! -name "Wrapper_tb.v" > FileList.txt')
+    os.system('find . -name "*.v" | grep -v "Wrapper_tb.v" > FileList.txt')
     
     # Read the contents of FileList.txt and remove lines containing "Wrapper_tb.v"
     with open('FileList.txt', 'r') as file:
@@ -121,6 +121,7 @@ def compile_all_procs(tests, procs_folder="example"):
 
             # Change directory back to original
             os.chdir(original_directory)
+            Logger.info(f"Processor {proc} compiled successfully.")
 
     sorted_results = sorted(proc_results, key=lambda x: x.name)
     return sorted_results

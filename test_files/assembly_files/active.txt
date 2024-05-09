@@ -1,2 +1,2 @@
-sort_nop
+branch_memory
 jal_bypass

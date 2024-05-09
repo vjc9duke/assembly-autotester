@@ -45,7 +45,7 @@ def export_results(proc_results, tests, rolling=False, folder=dv.OUTPUT_DIR):
             for test in tests:
                 # Check if test is in expected or actual
                 expected_val = 1 if test in proc_result.expected else 0
-                actual_val = 1 if test in proc_result.actual else 0
+                actual_val = 1 if test in proc_result.actual else -1 if test in proc_result.failed else 0
                 diff_val = actual_val - expected_val
 
                 # Write row to CSV
@@ -73,6 +73,8 @@ def export_results(proc_results, tests, rolling=False, folder=dv.OUTPUT_DIR):
     print("{:<20} {:<20} {:<10} {:<10} {:<10}".format(*fieldnames))
     for proc_result in proc_results:
         for test in tests:
+
+            # FIXME: duplicated code
             expected_val = 1 if test in proc_result.expected else 0
             actual_val = 1 if test in proc_result.actual else -1 if test in proc_result.failed else 0
             diff_val = actual_val - expected_val
