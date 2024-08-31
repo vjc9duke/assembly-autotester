@@ -1,2 +1,6 @@
-alu_bypass
-alu_double_bypass
+sort_test
+sort
+add_lw
+lw_add
+lw_jr
+lw_lw_blt

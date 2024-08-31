@@ -1,2 +1,4 @@
-branch_memory
-jal_bypass
+add_lw
+lw_add
+lw_jr
+lw_lw_blt
