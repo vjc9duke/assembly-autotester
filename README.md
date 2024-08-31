@@ -1,6 +1,8 @@
 # Assembly File Autotester
 ## Overview 
-This repository provides an automated way to test new assembly files against known processors. All assembly files in the `test_files/assembly_files` directory will be automatically compiled and tested against the provided processors. The results are shown in console and printed to files in the `output` directory. 
+This repository provides an automated way to test new assembly files against known processors. All assembly files in the `test_files/assembly_files` directory will be automatically compiled and tested against the provided processors. **Note**: The expected files in `test_files/verification_files` MUST have an empty new line at the end of the file.
+
+The results are shown in console and printed to files in the `output` directory. 
 
 ## Configuration
 The `config.yaml` configuration file provides numerous options for the autotester. The most important are:
